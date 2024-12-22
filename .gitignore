@@ -128,3 +128,15 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Customs
+data/
+*.swp
+*.swo
+.style.yapf
+.pep8
+.flake8
+.vscode/
+.DS_Store
+tags
+__pycache__
