@@ -17,7 +17,8 @@ class AudioFileSplitter():
         t1 = from_min * 60 * 1000
         t2 = to_min * 60 * 1000
         split_audio = self.__audio[t1:t2]
-        split_audio.export(self.__split_folder + '/' + split_file_name, format = "wav")
+        # split_audio.export(self.__split_folder + '/' + split_file_name, format = "wav")
+        split_audio.export(os.path.join(self.__split_folder, split_file_name), format = "wav")
 
     def multiple_split(self, min_per_split: int):
         total_mins = math.ceil(self.__audio.duration_seconds / 60)
