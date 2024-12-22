@@ -130,7 +130,6 @@ dist
 .pnp.*
 
 # Customs
-data/
 *.swp
 *.swo
 .style.yapf
