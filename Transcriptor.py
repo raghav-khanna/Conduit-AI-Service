@@ -10,13 +10,14 @@ Functions -
 
 import whisper
 import logging
+import os
 
 logging.getLogger('requests').setLevel(logging.ERROR)
 logging.basicConfig(level=30, format="%(levelname)s:%(message)s:\n") # Comment this line to stop showing the messages
 
 class Transcriptor:
 
-    def __init__(self, audio_file_folder_path, audio_file_name = '', model_name="trubo", output_file_path=""):
+    def __init__(self, audio_file_folder_path, audio_file_name = '', model_name="tiny", output_file_path=""):
         self.audio_file_folder_path = audio_file_folder_path
         self.audio_file_name = audio_file_name
         self.model_name = model_name
@@ -52,7 +53,8 @@ class Transcriptor:
                 self.transcription = self.model.transcribe(audio_file_path)["text"]
             except Exception as e:
                 logging.error(f"Error transcribing {self.audio_file_name} - {e}")
-    
+        
+        return self.transcribe
 
     def save_transcription(self):
         if self.transcription == "":
@@ -68,7 +70,7 @@ class Transcriptor:
         except Exception as e:
             logging.error(f"Error creating output file path - {e}")
         try:
-            with open(output_file_path, 'w') as f:
+            with open(output_file_path, 'w', encoding="utf-8") as f:
                 f.write(self.transcription)
             logging.info(f"Transcription saved to {output_file_path}")
         except Exception as e:
