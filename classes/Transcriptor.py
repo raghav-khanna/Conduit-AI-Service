@@ -17,7 +17,7 @@ logging.basicConfig(level=30, format="%(levelname)s:%(message)s:\n") # Comment t
 
 class Transcriptor:
 
-    def __init__(self, audio_file_folder_path, audio_file_name = '', model_name="tiny", output_file_path=""):
+    def __init__(self, audio_file_folder_path, audio_file_name = '', model_name="large-v1", output_file_path=""):
         self.audio_file_folder_path = audio_file_folder_path
         self.audio_file_name = audio_file_name
         self.model_name = model_name
@@ -66,7 +66,7 @@ class Transcriptor:
             elif self.output_file_path == '':
                 output_file_path = os.path.join(self.audio_file_folder_path, self.audio_file_name.split(".")[0] + "_transcription.txt")
             else:
-                output_file_path = self.output_file_path
+                output_file_path = os.path.join(self.output_file_path, "transcription.txt")
         except Exception as e:
             logging.error(f"Error creating output file path - {e}")
         try:
