@@ -1,9 +1,9 @@
 '''
 Transcriptor.py
 This file contains the Transcriptor class which is responsible for transcribing the audio file.
-Constructor - 
+Constructor -
     Takes the audio file path and model name as input
-Functions - 
+Functions -
     1. transcribe - Transcribes the audio file and returns the text
     2. save_transcription - Saves the transcription to a file
 '''
@@ -13,7 +13,7 @@ import logging
 import os
 
 logging.getLogger('requests').setLevel(logging.ERROR)
-logging.basicConfig(level=30, format="%(levelname)s:%(message)s:\n") # Comment this line to stop showing the messages
+logging.basicConfig(level=10, format="%(levelname)s:%(message)s:\n") # Comment this line to stop showing the messages
 
 class Transcriptor:
 
@@ -35,13 +35,13 @@ class Transcriptor:
         if self.audio_file_name == '':
             logging.info("Audio file name is empty, transcribing all the files inside the folder")
             # Get each file in the folder and transcribe
-            for file in os.listdir(self.audio_file_folder_path):
+            for file in sorted(os.listdir(self.audio_file_folder_path)):
                 filename = os.fsdecode(file)
                 if filename.endswith(".wav"):
                     logging.debug(f"Transcribing {filename}")
                     audio_file_path = os.path.join(self.audio_file_folder_path, filename)
                     try:
-                        self.transcription += self.model.transcribe(audio_file_path)["text"]
+                        self.transcription += self.model.transcribe(audio_file_path, task="translate")["text"]
                     except Exception as e:
                         logging.error(f"Error transcribing {filename} - {e}")
                     logging.debug(f"Transcription completed for {filename}")
@@ -53,7 +53,7 @@ class Transcriptor:
                 self.transcription = self.model.transcribe(audio_file_path)["text"]
             except Exception as e:
                 logging.error(f"Error transcribing {self.audio_file_name} - {e}")
-        
+
         return self.transcribe
 
     def save_transcription(self):
