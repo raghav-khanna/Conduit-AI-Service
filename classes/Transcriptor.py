@@ -13,21 +13,22 @@ import logging
 import os
 
 logging.getLogger('requests').setLevel(logging.ERROR)
-logging.basicConfig(level=30, format="%(levelname)s:%(message)s:\n") # Comment this line to stop showing the messages
+logging.basicConfig(level=10, format="%(levelname)s:%(message)s:\n") # Comment this line to stop showing the messages
 
 class Transcriptor:
 
-    def __init__(self, audio_file_folder_path, audio_file_name = '', model_name="large-v1", output_file_path=""):
+    def __init__(self, audio_file_folder_path, audio_file_name = '', model_name="large-v1", output_file_path="", output_file_name=""):
         self.audio_file_folder_path = audio_file_folder_path
         self.audio_file_name = audio_file_name
         self.model_name = model_name
         self.output_file_path = output_file_path
+        self.output_file_name = output_file_name
         # Load the model
-        logging.info(f"Loading model {model_name}")
+        logging.info(f"Loading model {self.model_name}")
         try:
-            self.model = whisper.load_model(model_name)
+            self.model = whisper.load_model(self.model_name)
         except Exception as e:
-            logging.error(f"Error loading model {model_name} - {e}")
+            logging.error(f"Error loading model {self.model_name} - {e}")
         self.transcription = ""
 
     def transcribe(self):
@@ -35,13 +36,13 @@ class Transcriptor:
         if self.audio_file_name == '':
             logging.info("Audio file name is empty, transcribing all the files inside the folder")
             # Get each file in the folder and transcribe
-            for file in os.listdir(self.audio_file_folder_path):
+            for file in sorted(os.listdir(self.audio_file_folder_path)):
                 filename = os.fsdecode(file)
                 if filename.endswith(".wav"):
                     logging.debug(f"Transcribing {filename}")
                     audio_file_path = os.path.join(self.audio_file_folder_path, filename)
                     try:
-                        self.transcription += self.model.transcribe(audio_file_path)["text"]
+                        self.transcription += self.model.transcribe(audio_file_path, task="translate")["text"]
                     except Exception as e:
                         logging.error(f"Error transcribing {filename} - {e}")
                     logging.debug(f"Transcription completed for {filename}")
@@ -50,7 +51,7 @@ class Transcriptor:
         else:
             audio_file_path = os.path.join(self.audio_file_folder_path, self.audio_file_name)
             try:
-                self.transcription = self.model.transcribe(audio_file_path)["text"]
+                self.transcription = self.model.transcribe(audio_file_path, task="translate")["text"]
             except Exception as e:
                 logging.error(f"Error transcribing {self.audio_file_name} - {e}")
         
@@ -65,6 +66,8 @@ class Transcriptor:
                 output_file_path = os.path.join(self.audio_file_folder_path, "transcription.txt")
             elif self.output_file_path == '':
                 output_file_path = os.path.join(self.audio_file_folder_path, self.audio_file_name.split(".")[0] + "_transcription.txt")
+            elif self.output_file_name != '':
+                output_file_path = os.path.join(self.output_file_path, self.output_file_name, "_transcription.txt")
             else:
                 output_file_path = os.path.join(self.output_file_path, "transcription.txt")
         except Exception as e:
