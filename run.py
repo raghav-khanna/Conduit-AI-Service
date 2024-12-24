@@ -4,7 +4,7 @@ import os
 
 
 def main() -> int:
-    base_data_path: str = '/Users/pranavchatur/Conduit-AI-Service/data/'
+    base_data_path: str = '<your-repo-path>/Conduit-AI-Service/data/'
     input_file_path: str = os.path.join(base_data_path, 'input/Rainbow Plaza.wav')
     split_files_path: str = os.path.join(base_data_path, 'splitFiles')
     output_file_path: str = os.path.join(base_data_path, 'output')
