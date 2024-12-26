@@ -7,7 +7,7 @@ from utils.LogHandling import log_err, log_val
 
 
 def main() -> int:
-    base_data_path: str = '/Users/pranavchatur/Conduit-AI-Service/data/'
+    base_data_path: str = '<your-repo-location>/Conduit-AI-Service/data/'
     input_file_path: str = os.path.join(base_data_path, 'input/Ra.m4a')
 
     split_files_path: str = os.path.join(base_data_path, 'splitFiles')
