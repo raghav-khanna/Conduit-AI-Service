@@ -16,7 +16,7 @@ class AudioFileSplitter():
     def single_split(self, from_min: int, to_min: int, chunk_num: int = 0):
         t1 = from_min * 60 * 1000
         t2 = to_min * 60 * 1000
-        split_file_name = str(chunk_num) + '_' + self.__file_name_with_extension
+        split_file_name = str(chunk_num).zfill(4) + '_' + self.__file_name_with_extension
         split_audio = self.__audio[t1:t2]
         split_audio.export(os.path.join(self.__split_folder_path, self.__file_name_without_extension, split_file_name), format = "wav")
 
@@ -25,6 +25,6 @@ class AudioFileSplitter():
         chunk_num = 1
         for i in range(0, total_mins, min_per_split):
             self.single_split(i, i + min_per_split, chunk_num)
-            log_prog('Chunk ' + str(chunk_num) + ' has been completed')
+            log_prog('Chunk ' + str(chunk_num).zfill(4) + ' has been completed')
             chunk_num += 1
         log_prog('Splitting complete')
